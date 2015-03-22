@@ -1,4 +1,7 @@
-package.cpath = ";?51.dll;..package.cpath"
+package.cpath = ";?51.dll;"..package.cpath
+
+local iuplua_open = package.loadlib("iuplua51.dll", "iuplua_open");
+local iuplua_close = package.loadlib("iuplua51.dll", "iuplua_close");
 
 require "cdlua"
 require "iuplua"
@@ -13,7 +16,7 @@ function get_mem()
     gui.text(10,10,string.format("Xpos: %d",pos_x))
     gui.text(10,20,string.format("Ypos: %d",pos_y))
 end
-event.onframeend(get_mem)
+--event.onframeend(get_mem)
 
 -- Initialize some IUP component for the UI
 label_counter = iup.label{title="1", size="20x20"}
@@ -29,15 +32,14 @@ function close_cb()
   return iup.IGNORE -- because we destroy the dialog
 end
 
-timer1 = iup.timer{time=40}
+timer1 = iup.timer{time=10}
 isInit = false
 function timer1:action_cb()
   if(isInit==false) then
     isInit=true
-    --print("init timer")
     return iup.CLOSE
   end
-  print("")
+  --print("")
   --print("timer1 called")
 
   isInit=false;
@@ -92,6 +94,7 @@ dlg:show()
 
 
 function idle_cb()
+  get_mem();
   label_counter.title = tonumber(label_counter.title) + 1;
   label_x.title = "x: "..pos_x;
   label_y.title = "y: "..pos_y;
